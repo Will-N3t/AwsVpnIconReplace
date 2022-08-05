@@ -9,28 +9,41 @@ cd "`dirname $0`"
 appName="AWS VPN Client"
 appDir="/Applications/AWS VPN Client/${appName}.app"
 
-appDir="/Applications/AWS VPN Client/"
-
-vpnDir="${appDir}/${vpnName}.app"
-uninstallDir="${appDir}/${uninstallName}.app"
-
 # Remove originals
-sudo rm "${vpnDir}/Contents/Resources/acvc-16.png"
-sudo rm "${vpnDir}/Contents/Resources/acvc-64.png"
-sudo rm "${vpnDir}/Contents/Resources/AppIcon.icns"
-sudo rm "${uninstallDir}/Contents/Resources/AppIcon.icns"
+sudo rm "${appDir}/Contents/Resources/acvc-16.png"
+sudo rm "${appDir}/Contents/Resources/acvc-64.png"
+sudo rm "${appDir}/Contents/Resources/AppIcon.icns"
 
 # Replace with new
-sudo cp ./resources/acvc-16.png "${vpnDir}/Contents/Resources"
-sudo cp ./resources/acvc-64.png "${vpnDir}/Contents/Resources"
-sudo cp ./resources/AppIcon.icns "${vpnDir}/Contents/Resources"
-sudo cp ./resources/AppIcon.icns "${uninstallDir}/Contents/Resources"
+sudo cp resources/acvc-16.png "${appDir}/Contents/Resources"
+sudo cp resources/acvc-64.png "${appDir}/Contents/Resources"
+sudo cp resources/AppIcon.icns "${appDir}/Contents/Resources"
+
+# Issue instruction to click + drag icon over
+open resources
+
+sudo osascript -e "set aFile to (POSIX file \"${appDir}\") as text" \
+          -e "tell application \"Finder\" to open information window of file aFile"
+
+printf "\n\n\nDrag the new AppIcon file onto the existing orange icon to replace it, \n"
+read -n 1 -s -r -p "then press any key to continue..."
+
+
+# Kill the VPN
+printf "\n\nKilling AWS VPN...\n"
+sleep 2
+sudo killall "${appName}"
 
 # Reload the dock
-sudo touch "${vpnDir}"
+sleep 2
+sudo touch "${appDir}"
+
+printf "\n\nRestarting UI...\n"
+sleep 2
 sudo killall Finder
 sudo killall Dock
 
-# Kill and restart the VPN
-sudo killall "${vpnName}"
-sudo open "${vpnDir}"
+# Restart the VPN
+printf "\n\nRestarting AWS VPN...\n"
+sleep 2
+sudo open "${appDir}"
