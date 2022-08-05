@@ -1,11 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
 set +e
 
+# Run in repo directory
+cd "`dirname $0`"
 
 # Assume default AWS VPN install directory
-vpnName="AWS VPN Client"
-uninstallName="Uninstall AWS VPN Client"
+appName="AWS VPN Client"
+appDir="/Applications/AWS VPN Client/${appName}.app"
 
 appDir="/Applications/AWS VPN Client/"
 
