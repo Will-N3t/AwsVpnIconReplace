@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set +e
-set -x
+
 
 # Assume default AWS VPN install directory
 vpnName="AWS VPN Client"
